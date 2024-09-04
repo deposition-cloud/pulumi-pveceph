@@ -11,11 +11,11 @@ _utilities.register(
     resource_modules="""
 [
  {
-  "pkg": "xyz",
+  "pkg": "pveceph",
   "mod": "index",
-  "fqn": "pulumi_xyz",
+  "fqn": "pulumi_pveceph",
   "classes": {
-   "xyz:index:Random": "Random"
+   "pveceph:index:Random": "Random"
   }
  }
 ]
@@ -23,9 +23,9 @@ _utilities.register(
     resource_packages="""
 [
  {
-  "pkg": "xyz",
-  "token": "pulumi:providers:xyz",
-  "fqn": "pulumi_xyz",
+  "pkg": "pveceph",
+  "token": "pulumi:providers:pveceph",
+  "fqn": "pulumi_pveceph",
   "class": "Provider"
  }
 ]

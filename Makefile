@@ -1,23 +1,25 @@
-PROJECT_NAME := Pulumi Xyz Resource Provider
+SHELL := /bin/bash
+PROJECT_NAME := Pulumi PVE Ceph Resource Provider
 
-PACK             := xyz
+PACK             := pveceph
 PACKDIR          := sdk
-PROJECT          := github.com/pulumi/pulumi-xyz
-NODE_MODULE_NAME := @abc/xyz
-NUGET_PKG_NAME   := Abc.Xyz
+PROJECT          := github.com/deposition-cloud/pulumi-${PACK}
+ORG              := deposition-cloud
+NAME             := pveceph
+REPOSITORY       := github.com/deposition-cloud/pulumi-${PACK}
+NODE_MODULE_NAME := @deposition.cloud/pulumi-${PACK}
+NUGET_PKG_NAME   := DepositionCloud.PveCeph
 
-PROVIDER        := pulumi-resource-${PACK}
-VERSION         ?= $(shell pulumictl get version)
-PROVIDER_PATH   := provider
-VERSION_PATH    := ${PROVIDER_PATH}.Version
+PROVIDER         := pulumi-resource-${PACK}
+VERSION          ?= $(shell pulumictl get version)
+PROVIDER_PATH    := provider
+VERSION_PATH     := ${PROVIDER_PATH}.Version
 
-GOPATH			:= $(shell go env GOPATH)
-
-WORKING_DIR     := $(shell pwd)
-EXAMPLES_DIR    := ${WORKING_DIR}/examples/yaml
-TESTPARALLELISM := 4
-
-OS := $(shell uname)
+GOPATH           := $(shell go env GOPATH)
+WORKING_DIR      := $(shell pwd)
+EXAMPLES_DIR     := ${WORKING_DIR}/examples/yaml
+TESTPARALLELISM  := 4
+OS               := $(shell uname)
 
 prepare::
 	@if test -z "${NAME}"; then echo "NAME not set"; exit 1; fi
@@ -71,11 +73,13 @@ nodejs_sdk::
 	rm -rf sdk/nodejs
 	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language nodejs
 	cd ${PACKDIR}/nodejs/ && \
+	  sed -i.bak 's|@pulumi/${PACK}|${NODE_MODULE_NAME}|' package.json && \
+		rm ./package.json.bak && \
 		yarn install && \
 		yarn run tsc && \
 		cp ../../README.md ../../LICENSE package.json yarn.lock bin/ && \
-		sed -i.bak 's/$${VERSION}/$(VERSION)/g' bin/package.json && \
-		rm ./bin/package.json.bak
+		echo "VERSION: ----------- ${VERSION}" && \
+		sed -i.bak 's/$${VERSION}/$(VERSION)/g' bin/package.json
 
 python_sdk:: PYPI_VERSION := $(shell pulumictl get version --language python)
 python_sdk::

@@ -1,4 +1,4 @@
-module github.com/pulumi/pulumi-xyz/provider
+module github.com/deposition-cloud/pulumi-pveceph/provider
 
 go 1.21
 
